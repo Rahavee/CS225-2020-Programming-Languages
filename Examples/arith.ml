@@ -53,6 +53,12 @@ let rec redx e = match e with
    | Not(e) -> Not(redx e)
    | And(e1,e2) -> if isval e1 then And(e1, redx e2) else And(redx e1, e2)
    | Or(e1, e2) -> if isval e1 then Or(e1, redx e2) else Or(redx e1, e2)
+   | Equal(Nat(i1), Nat(i2)) -> if i1 = i2 then Bool(true) else Bool(false)
+   | Equal(e1,e2) -> if isval e1 then Equal(e1, redx e2) else Equal(redx e1, e2)
+   | Plus(Nat(i1), Nat(i2)) -> Nat(i1+i2)
+   | Plus(e1 , e2) -> if isval e1 then Plus(e1, redx e2) else Plus(redx e1, e2)
+   | Minus(i1,i2) -> if i1 - i2 < 0 then Nat(0) else Nat(i1 - i2)
+   | Minus(e1, e2) -> if isval e1 then Minus(e1, redx e2) else Minus(redx e1, e2)
    | _ -> raise NotReducible
 
 (*
